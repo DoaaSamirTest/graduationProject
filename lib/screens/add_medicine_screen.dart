@@ -3,11 +3,13 @@ import '../models/medicine.dart';
 import '../utils/database_helper.dart';
 
 class AddMedicineScreen extends StatefulWidget {
+  const AddMedicineScreen({super.key});
+
   @override
-  _AddMedicineScreenState createState() => _AddMedicineScreenState();
+  AddMedicineScreenState createState() => AddMedicineScreenState();
 }
 
-class _AddMedicineScreenState extends State<AddMedicineScreen> {
+class AddMedicineScreenState extends State<AddMedicineScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _locationController = TextEditingController();
@@ -79,15 +81,15 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 Spacer(),
                 ElevatedButton(
                   onPressed: _saveMedicine,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text('حفظ الدواء', style: TextStyle(fontSize: 18)),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text('حفظ الدواء', style: TextStyle(fontSize: 18)),
                   ),
                 ),
               ],
@@ -132,8 +134,9 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
         time: _formatTimeOfDay(_selectedTime),
         location: _locationController.text,
       );
-      
       await DatabaseHelper().insertMedicine(medicine);
+      
+      if (!mounted) return;
       Navigator.pop(context);
     }
   }

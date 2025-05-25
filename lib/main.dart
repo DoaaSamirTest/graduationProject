@@ -11,6 +11,8 @@ void main() async {
 }
 
 class MedicineApp extends StatelessWidget {
+  const MedicineApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

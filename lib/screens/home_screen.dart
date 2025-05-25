@@ -5,11 +5,13 @@ import 'medicine_details_screen.dart';
 import 'add_medicine_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   final DatabaseHelper _dbHelper = DatabaseHelper();
   List<Medicine> _medicines = [];
   bool _isLoading = true;
@@ -55,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    ..._medicines.map((medicine) => _buildMedicineCard(medicine)).toList(),
+                    ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
                     SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () async {
@@ -65,16 +67,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                         _loadMedicines();
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text('إضافة دواء جديد',
-                            style: TextStyle(fontSize: 16)),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text('إضافة دواء جديد',
+                            style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],

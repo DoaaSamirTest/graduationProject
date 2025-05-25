@@ -6,13 +6,13 @@ import 'control_screen.dart';
 class MedicineDetailsScreen extends StatefulWidget {
   final Medicine? medicine;
 
-  const MedicineDetailsScreen({Key? key, this.medicine}) : super(key: key);
+  const MedicineDetailsScreen({super.key, this.medicine});
 
   @override
-  _MedicineDetailsScreenState createState() => _MedicineDetailsScreenState();
+  MedicineDetailsScreenState createState() => MedicineDetailsScreenState();
 }
 
-class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
+class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
   late Medicine _medicine;
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
@@ -27,10 +27,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('تفاصيل الدواء'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: Text('تفاصيل الدواء'), centerTitle: true),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -48,7 +45,11 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                       CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.blue.shade100,
-                        child: Icon(Icons.medication, size: 40, color: Colors.blue),
+                        child: Icon(
+                          Icons.medication,
+                          size: 40,
+                          color: Colors.blue,
+                        ),
                       ),
                       SizedBox(height: 16),
                       Text(
@@ -66,10 +67,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                           SizedBox(width: 8),
                           Text(
                             _medicine.time,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey,
-                            ),
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -81,10 +79,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                           SizedBox(width: 8),
                           Text(
                             'الموقع: ${_medicine.location}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey,
-                            ),
+                            style: TextStyle(fontSize: 18, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -94,10 +89,18 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ControlScreen(medicine: _medicine),
+                              builder:
+                                  (context) =>
+                                      ControlScreen(medicine: _medicine),
                             ),
                           );
                         },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Row(
@@ -105,41 +108,44 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                             children: [
                               Icon(Icons.navigation),
                               SizedBox(width: 8),
-                              Text('تحريك العربية للدواء', style: TextStyle(fontSize: 16)),
+                              Text(
+                                'تحريك العربية للدواء',
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ],
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                       ),
                       SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: _medicine.taken ? null : _markAsTaken,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          disabledBackgroundColor: Colors.grey.shade300,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(_medicine.taken ? Icons.check : Icons.check_circle),
+                              Icon(
+                                _medicine.taken
+                                    ? Icons.check
+                                    : Icons.check_circle,
+                              ),
                               SizedBox(width: 8),
                               Text(
-                                _medicine.taken ? 'تم أخذ الدواء' : 'تأكيد أخذ الدواء',
+                                _medicine.taken
+                                    ? 'تم أخذ الدواء'
+                                    : 'تأكيد أخذ الدواء',
                                 style: TextStyle(fontSize: 16),
                               ),
                             ],
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white, 
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          disabledBackgroundColor: Colors.grey.shade300,
                         ),
                       ),
                     ],
@@ -161,13 +167,13 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
       taken: true,
       location: _medicine.location,
     );
-    
+
     await _dbHelper.updateMedicine(updatedMedicine);
-    
+
     setState(() {
       _medicine = updatedMedicine;
     });
-    
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('تم تأكيد أخذ الدواء'),
