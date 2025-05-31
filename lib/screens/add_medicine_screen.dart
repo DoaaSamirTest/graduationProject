@@ -21,78 +21,93 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xFFAED581),
           title: Text('إضافة دواء جديد'),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'اسم الدواء',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء إدخال اسم الدواء';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                TextFormField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    labelText: 'موقع الدواء (مثال: A1, B2)',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'الرجاء إدخال موقع الدواء';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                InkWell(
-                  onTap: _selectTime,
-                  child: InputDecorator(
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('lib/images/pexels-n-voitkevich-7615573.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    controller: _nameController,
                     decoration: InputDecoration(
-                      labelText: 'وقت تناول الدواء',
+                      labelText: 'اسم الدواء',
                       border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor:Colors.white.withOpacity(0.4), // خلفية بيضاء شفافة للحقل
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _formatTimeOfDay(_selectedTime),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Icon(Icons.access_time),
-                      ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال اسم الدواء';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    controller: _locationController,
+                    decoration: InputDecoration(
+                      labelText: 'موقع الدواء (مثال: A1, B2)',
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.4),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال موقع الدواء';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  InkWell(
+                    onTap: _selectTime,
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'وقت تناول الدواء',
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.4),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _formatTimeOfDay(_selectedTime),
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Icon(Icons.access_time),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Spacer(),
-                ElevatedButton(
-                  onPressed: _saveMedicine,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                  Spacer(),
+                  ElevatedButton(
+                    onPressed: _saveMedicine,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text('حفظ الدواء', style: TextStyle(fontSize: 18,color: Colors.white)),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text('حفظ الدواء', style: TextStyle(fontSize: 18)),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -135,7 +150,7 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
         location: _locationController.text,
       );
       await DatabaseHelper().insertMedicine(medicine);
-      
+
       if (!mounted) return;
       Navigator.pop(context);
     }

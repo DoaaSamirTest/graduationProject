@@ -35,60 +35,82 @@ class HomeScreenState extends State<HomeScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 3, 103, 65),
           title: Text('جدول الأدوية'),
           centerTitle: true,
+          elevation:0,
         ),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          _getCurrentDate(),
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddMedicineScreen()),
-                        );
-                        _loadMedicines();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text('إضافة دواء جديد',
-                            style: TextStyle(fontSize: 16)),
-                      ),
-                    ),
-                  ],
-                ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            // الخلفية
+            Positioned.fill(
+              child: Image.asset(
+                'lib/images/pexels-n-voitkevich-7615574.jpg',
+                fit: BoxFit.cover,
               ),
+            ),
+
+            // المحتوى
+            _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Card(
+                          color: Colors.white.withOpacity(0.6),
+                          elevation: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              _getCurrentDate(),
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
+                        SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AddMedicineScreen()),
+                            );
+                            _loadMedicines();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 3, 103, 65).withOpacity(0.6),
+
+
+  
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text('إضافة دواء جديد',
+                                style: TextStyle(fontSize: 16,
+                                color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildMedicineCard(Medicine medicine) {
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      color: Colors.white.withOpacity(0.6),
+      margin: EdgeInsets.only(bottom: 24),
       child: InkWell(
         onTap: () async {
           await Navigator.push(
@@ -97,15 +119,15 @@ class HomeScreenState extends State<HomeScreen> {
               builder: (context) => MedicineDetailsScreen(medicine: medicine),
             ),
           );
-          _loadMedicines(); // لتحديث القائمة بعد العودة
+          _loadMedicines();
         },
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: Colors.blue.shade100,
-                child: Icon(Icons.medication, color: Colors.blue),
+                backgroundColor: const Color.fromARGB(255, 45, 191, 125),
+                child: Icon(Icons.medication, color: Colors.white),
               ),
               SizedBox(width: 16),
               Expanded(
@@ -132,11 +154,11 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               CircleAvatar(
                 radius: 14,
-                backgroundColor: medicine.taken ? Colors.green.shade100 : Colors.blue.shade100,
+                backgroundColor: medicine.taken ? Colors.green.shade100 : const Color.fromARGB(255, 45, 191, 125),
                 child: Icon(
                   medicine.taken ? Icons.check : Icons.notifications,
                   size: 16,
-                  color: medicine.taken ? Colors.green : Colors.blue,
+                  color: medicine.taken ? Colors.green : Colors.white,
                 ),
               ),
             ],
