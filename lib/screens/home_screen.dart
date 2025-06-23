@@ -39,51 +39,89 @@ class HomeScreenState extends State<HomeScreen> {
           backgroundColor: const Color.fromARGB(255, 3, 103, 65),
           title: Text('جدول الأدوية'),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
+                );
+              },
+              tooltip: 'البحث عن الأدوية',
+            ),
+          ],
         ),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          _getCurrentDate(),
-                          style: TextStyle(fontSize: 16),
-                          textAlign: TextAlign.center,
+        body:
+            _isLoading
+                ? Center(child: CircularProgressIndicator())
+                : SingleChildScrollView(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            _getCurrentDate(),
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddMedicineScreen()),
-                        );
-                        _loadMedicines();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                      SizedBox(height: 16),
+                      ..._medicines.map(
+                        (medicine) => _buildMedicineCard(medicine),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddMedicineScreen(),
+                            ),
+                          );
+                          _loadMedicines();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'إضافة دواء جديد',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text('إضافة دواء جديد',
-                            style: TextStyle(fontSize: 16)),
+                      SizedBox(height: 12),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SearchScreen(),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.search),
+                        label: Text('البحث عن الأدوية'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
       ),
     );
   }
@@ -138,7 +176,10 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               CircleAvatar(
                 radius: 14,
-                backgroundColor: medicine.taken ? Colors.green.shade100 : Colors.blue.shade100,
+                backgroundColor:
+                    medicine.taken
+                        ? Colors.green.shade100
+                        : Colors.blue.shade100,
                 child: Icon(
                   medicine.taken ? Icons.check : Icons.notifications,
                   size: 16,

@@ -28,9 +28,11 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(title: Text('تفاصيل الدواء'),
-        backgroundColor: const Color(0xFFAED581),
-         centerTitle: true),
+        appBar: AppBar(
+          title: Text('تفاصيل الدواء'),
+          backgroundColor: const Color(0xFFAED581),
+          centerTitle: true,
+        ),
         body: Stack(
           children: [
             // ✅ الخلفية
@@ -59,7 +61,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                         children: [
                           CircleAvatar(
                             radius: 40,
-                            backgroundColor:Colors.white,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.medication,
                               size: 40,
@@ -82,7 +84,10 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               SizedBox(width: 8),
                               Text(
                                 _medicine.time,
-                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ],
                           ),
@@ -94,7 +99,10 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               SizedBox(width: 8),
                               Text(
                                 'الموقع: ${_medicine.location}',
-                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ],
                           ),
@@ -104,7 +112,9 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ControlScreen(medicine: _medicine),
+                                  builder:
+                                      (context) =>
+                                          ControlScreen(medicine: _medicine),
                                 ),
                               );
                             },
@@ -134,9 +144,15 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                           ElevatedButton(
                             onPressed: _medicine.taken ? null : _markAsTaken,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: _medicine.taken
-                                  ? Colors.grey.shade300
-                                  : const Color.fromARGB(255, 227, 227, 116).withOpacity(0.6),
+                              backgroundColor:
+                                  _medicine.taken
+                                      ? Colors.grey.shade300
+                                      : const Color.fromARGB(
+                                        255,
+                                        227,
+                                        227,
+                                        116,
+                                      ).withOpacity(0.6),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -148,7 +164,9 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    _medicine.taken ? Icons.check : Icons.check_circle,
+                                    _medicine.taken
+                                        ? Icons.check
+                                        : Icons.check_circle,
                                   ),
                                   SizedBox(width: 8),
                                   Text(
@@ -158,6 +176,24 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          ElevatedButton.icon(
+                            onPressed: () async {
+                              await HttpTestService.sendMedicineNameToServer(
+                                context,
+                                _medicine.name,
+                              );
+                            },
+                            icon: Icon(Icons.send),
+                            label: Text('إرسال اسم الدواء للخادم'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purple,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),
