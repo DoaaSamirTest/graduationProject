@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart'
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/services.dart';
 import '../models/medicine.dart';
+import '../utils/http_test_service.dart';
 import 'widgets/connection_status_card.dart';
 import 'widgets/device_list.dart';
 import 'widgets/control_panel.dart';
@@ -267,6 +268,11 @@ class ControlScreenState extends State<ControlScreen> {
     );
   }
 
+  /// Sends a test HTTP request to the Flask server
+  Future<void> _sendHttpTest() async {
+    await HttpTestService.sendHttpTest(context);
+  }
+
   // =================== UI ===================
 
   @override
@@ -298,12 +304,29 @@ class ControlScreenState extends State<ControlScreen> {
             Expanded(
               child:
                   _devicesList.isEmpty
-                      ? const Center(
-                        child: Text(
-                          "لا توجد أجهزة\nيرجى إقران جهازك من إعدادات البلوتوث",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
-                        ),
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "لا توجد أجهزة\nيرجى إقران جهازك من إعدادات البلوتوث",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton.icon(
+                            onPressed: _sendHttpTest,
+                            icon: const Icon(Icons.http),
+                            label: const Text('اختبار الاتصال بالخادم'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 12,
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                       : _devicesList.isNotEmpty && !_isConnected
                       ? DeviceList(
@@ -320,6 +343,7 @@ class ControlScreenState extends State<ControlScreen> {
                         sendCommand: _sendCommand,
                         isPickingMedicine: _isPickingMedicine,
                         pickMedicine: _pickMedicine,
+                        sendHttpTest: _sendHttpTest,
                       )
                       : const SizedBox(),
             ),

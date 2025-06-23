@@ -3,6 +3,7 @@ import '../models/medicine.dart';
 import '../utils/database_helper.dart';
 import 'medicine_details_screen.dart';
 import 'add_medicine_screen.dart';
+import 'search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,71 +39,51 @@ class HomeScreenState extends State<HomeScreen> {
           backgroundColor: const Color.fromARGB(255, 3, 103, 65),
           title: Text('جدول الأدوية'),
           centerTitle: true,
-          elevation:0,
         ),
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            // الخلفية
-            Positioned.fill(
-              child: Image.asset(
-                'lib/images/pexels-n-voitkevich-7615574.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            // المحتوى
-            _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Card(
-                          color: Colors.white.withOpacity(0.6),
-                          elevation: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              _getCurrentDate(),
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Card(
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          _getCurrentDate(),
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 16),
-                        ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
-                        SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => AddMedicineScreen()),
-                            );
-                            _loadMedicines();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 3, 103, 65).withOpacity(0.6),
-
-
-  
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Text('إضافة دواء جديد',
-                                style: TextStyle(fontSize: 16,
-                                color: Colors.white)),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-          ],
-        ),
+                    SizedBox(height: 16),
+                    ..._medicines.map((medicine) => _buildMedicineCard(medicine)),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AddMedicineScreen()),
+                        );
+                        _loadMedicines();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text('إضافة دواء جديد',
+                            style: TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -146,7 +127,10 @@ class HomeScreenState extends State<HomeScreen> {
                       children: [
                         Icon(Icons.access_time, size: 16, color: Colors.grey),
                         SizedBox(width: 4),
-                        Text(medicine.time, style: TextStyle(color: Colors.grey)),
+                        Text(
+                          medicine.time,
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ],
                     ),
                   ],
@@ -154,7 +138,7 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               CircleAvatar(
                 radius: 14,
-                backgroundColor: medicine.taken ? Colors.green.shade100 : const Color.fromARGB(255, 45, 191, 125),
+                backgroundColor: medicine.taken ? Colors.green.shade100 : Colors.blue.shade100,
                 child: Icon(
                   medicine.taken ? Icons.check : Icons.notifications,
                   size: 16,
@@ -171,13 +155,29 @@ class HomeScreenState extends State<HomeScreen> {
   String _getCurrentDate() {
     final now = DateTime.now();
     final months = [
-      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     final days = [
-      'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'
+      'الإثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت',
+      'الأحد',
     ];
-    
+
     return '${days[now.weekday - 1]}، ${now.day} ${months[now.month - 1]} ${now.year}';
   }
 }

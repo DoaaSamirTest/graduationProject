@@ -18,11 +18,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'medicine_robot.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDb,
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDb);
   }
 
   Future<void> _createDb(Database db, int version) async {
@@ -35,25 +31,22 @@ class DatabaseHelper {
         location TEXT
       )
     ''');
-    
+
     // إدخال بيانات أولية
-    await db.insert('medicines', Medicine(
-      name: 'بنادول', 
-      time: '09:00', 
-      location: 'A1'
-    ).toMap());
-    
-    await db.insert('medicines', Medicine(
-      name: 'فيتامين سي', 
-      time: '13:30', 
-      location: 'B2'
-    ).toMap());
-    
-    await db.insert('medicines', Medicine(
-      name: 'ضغط', 
-      time: '20:00', 
-      location: 'C3'
-    ).toMap());
+    await db.insert(
+      'medicines',
+      Medicine(name: 'بنادول', time: '09:00', location: 'A1').toMap(),
+    );
+
+    await db.insert(
+      'medicines',
+      Medicine(name: 'فيتامين سي', time: '13:30', location: 'B2').toMap(),
+    );
+
+    await db.insert(
+      'medicines',
+      Medicine(name: 'ضغط', time: '20:00', location: 'C3').toMap(),
+    );
   }
 
   Future<List<Medicine>> getMedicines() async {
@@ -79,10 +72,30 @@ class DatabaseHelper {
 
   Future<int> deleteMedicine(int id) async {
     Database db = await database;
-    return await db.delete(
+    return await db.delete('medicines', where: 'id = ?', whereArgs: [id]);
+  }
+
+  /// Gets all medicine names from the database
+  Future<List<String>> getMedicineNames() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
       'medicines',
-      where: 'id = ?',
-      whereArgs: [id],
+      columns: ['name'],
     );
+    return List.generate(maps.length, (i) => maps[i]['name'] as String);
+  }
+
+  /// Gets a medicine by name
+  Future<Medicine?> getMedicineByName(String name) async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'medicines',
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+    if (maps.isNotEmpty) {
+      return Medicine.fromMap(maps.first);
+    }
+    return null;
   }
 }

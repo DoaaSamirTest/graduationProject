@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'screens/medicine_details_screen.dart';
 import 'screens/control_screen.dart';
+import 'screens/search_screen.dart';
 import 'utils/database_helper.dart';
 
 void main() async {
@@ -17,22 +18,17 @@ class MedicineApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'تطبيق الأدوية الآلي',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Cairo',
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Cairo'),
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
       builder: (context, child) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: child!,
-        );
+        return Directionality(textDirection: TextDirection.rtl, child: child!);
       },
       routes: {
         '/home': (context) => HomeScreen(),
         '/details': (context) => MedicineDetailsScreen(),
         '/control': (context) => ControlScreen(),
+        '/search': (context) => SearchScreen(),
       },
     );
   }

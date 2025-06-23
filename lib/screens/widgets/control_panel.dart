@@ -5,11 +5,14 @@ class ControlPanel extends StatelessWidget {
   final Future<void> Function(String) sendCommand;
   final bool isPickingMedicine;
   final Future<void> Function() pickMedicine;
+  final Future<void> Function()? sendHttpTest;
+
   const ControlPanel({
     super.key,
     required this.sendCommand,
     required this.isPickingMedicine,
     required this.pickMedicine,
+    this.sendHttpTest,
   });
   @override
   Widget build(BuildContext context) {
@@ -121,6 +124,32 @@ class ControlPanel extends StatelessWidget {
                 ),
               ),
             ),
+            if (sendHttpTest != null) ...[
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: sendHttpTest,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.http),
+                      SizedBox(width: 8),
+                      Text(
+                        'اختبار الاتصال بالخادم',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
