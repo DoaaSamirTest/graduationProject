@@ -30,7 +30,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('تفاصيل الدواء'),
-          backgroundColor: const Color(0xFFAED581),
+          backgroundColor:Colors.white,
           centerTitle: true,
         ),
         body: Stack(
@@ -38,7 +38,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
             // ✅ الخلفية
             Positioned.fill(
               child: Image.asset(
-                'lib/images/pexels-n-voitkevich-7615573.jpg', // ← غيّري المسار حسب اسم الصورة
+                'assets/images/pexels.jpg', // ← غيّري المسار حسب اسم الصورة
                 fit: BoxFit.cover,
               ),
             ),
@@ -65,7 +65,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                             child: Icon(
                               Icons.medication,
                               size: 40,
-                              color: Color.fromARGB(255, 227, 227, 116),
+                              color: Color.fromARGB(255, 11, 3, 79),
                             ),
                           ),
                           SizedBox(height: 16),

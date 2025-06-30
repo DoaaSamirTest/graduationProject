@@ -58,6 +58,7 @@ class SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         appBar: AppBar(title: Text('البحث عن الأدوية'), centerTitle: true),
         body: Padding(
+          
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [

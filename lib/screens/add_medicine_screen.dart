@@ -21,14 +21,14 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFFAED581),
+          backgroundColor: Colors.white,
           title: Text('إضافة دواء جديد'),
           centerTitle: true,
         ),
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('lib/images/pexels-n-voitkevich-7615573.jpg'),
+              image: AssetImage('assets/images/pexels.jpg'),
               fit: BoxFit.cover,
             ),
           ),

@@ -36,7 +36,7 @@ class HomeScreenState extends State<HomeScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 3, 103, 65),
+          backgroundColor:Colors.white,
           title: Text('جدول الأدوية'),
           centerTitle: true,
           actions: [
@@ -52,10 +52,18 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body:
-            _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/pexels.jpg'), // ← غيّري المسار حسب الصورة
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: SingleChildScrollView(
                   padding: EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,6 +130,7 @@ class HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+              ),
       ),
     );
   }
