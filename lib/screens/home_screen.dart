@@ -137,7 +137,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMedicineCard(Medicine medicine) {
     return Card(
-      color: Colors.white.withOpacity(0.6),
+      color: Colors.white.withValues(alpha: 0.6), 
       margin: EdgeInsets.only(bottom: 24),
       child: InkWell(
         onTap: () async {

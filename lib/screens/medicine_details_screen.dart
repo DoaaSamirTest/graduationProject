@@ -51,7 +51,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                 children: [
                   Card(
                     elevation: 3,
-                    color: Colors.white.withOpacity(0.4), // ← خلفية شفافة للكرت
+                    color: Colors.white.withValues(alpha: 0.4), // ← خلفية شفافة للكرت
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -119,7 +119,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white.withOpacity(0.6),
+                              backgroundColor: Colors.white.withValues(alpha: 0.6),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -152,7 +152,7 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                                         227,
                                         227,
                                         116,
-                                      ).withOpacity(0.6),
+                                      ).withValues(alpha: 0.6),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),

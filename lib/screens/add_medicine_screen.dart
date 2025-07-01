@@ -45,7 +45,7 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                       labelText: 'اسم الدواء',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor:Colors.white.withOpacity(0.4), // خلفية بيضاء شفافة للحقل
+                      fillColor:Colors.white.withValues(alpha: 0.4), // خلفية بيضاء شفافة للحقل
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -61,7 +61,7 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                       labelText: 'موقع الدواء (مثال: A1, B2)',
                       border: OutlineInputBorder(),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.4),
+                      fillColor: Colors.white.withValues(alpha: 0.4),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -78,7 +78,7 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                         labelText: 'وقت تناول الدواء',
                         border: OutlineInputBorder(),
                         filled: true,
-                        fillColor: Colors.white.withOpacity(0.4),
+                        fillColor: Colors.white.withValues(alpha: 0.4),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +96,7 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                   ElevatedButton(
                     onPressed: _saveMedicine,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.4),
+                      backgroundColor: Colors.white.withValues(alpha: 0.4),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
