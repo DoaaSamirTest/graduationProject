@@ -34,7 +34,7 @@ class ConnectionStatusCard extends StatelessWidget {
                           ? Icons.bluetooth_connected
                           : Icons.bluetooth_disabled,
                       color:
-                          connectedSnapshot.data! ? Colors.green : Colors.red,
+                          connectedSnapshot.data! ? Colors.blue : Colors.red,
                     );
                   },
                 ),
@@ -42,7 +42,7 @@ class ConnectionStatusCard extends StatelessWidget {
                 Text(
                   snapshot.data!,
                   style: TextStyle(
-                    color: isConnected ? Colors.green : Colors.red,
+                    color: isConnected ? Colors.blue : Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

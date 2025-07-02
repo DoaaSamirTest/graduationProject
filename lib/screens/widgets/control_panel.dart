@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
-/// Widget for the robot control panel and medicine picking button.
-class ControlPanel extends StatelessWidget {
+class ControlPanel extends StatefulWidget {
   final Future<void> Function(String) sendCommand;
   final bool isPickingMedicine;
   final Future<void> Function() pickMedicine;
@@ -14,6 +14,39 @@ class ControlPanel extends StatelessWidget {
     required this.pickMedicine,
     this.sendHttpTest,
   });
+
+  @override
+  State<ControlPanel> createState() => _ControlPanelState();
+}
+
+class _ControlPanelState extends State<ControlPanel> {
+  Timer? _repeatTimer;
+
+  void _startSending(String command) {
+    widget.sendCommand(command); // أول مرة فورًا
+    _repeatTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+      widget.sendCommand(command);
+    });
+  }
+
+  void _stopSending() {
+    _repeatTimer?.cancel();
+    _repeatTimer = null;
+    widget.sendCommand('S'); // أمر التوقف
+  }
+
+  Widget _buildDirectionButton({
+    required IconData icon,
+    required String command,
+  }) {
+    return GestureDetector(
+      onTapDown: (_) => _startSending(command),
+      onTapUp: (_) => _stopSending(),
+      onTapCancel: () => _stopSending(),
+      child: Icon(icon, size: 50, color: Colors.blue),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -28,7 +61,7 @@ class ControlPanel extends StatelessWidget {
               color: Colors.grey.shade300,
               child: Center(
                 child:
-                    isPickingMedicine
+                    widget.isPickingMedicine
                         ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -59,97 +92,65 @@ class ControlPanel extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            IconButton(
-              icon: const Icon(Icons.arrow_upward, size: 50),
-              color: Colors.blue,
-              onPressed: () => sendCommand('F'),
-            ),
+
+            // زرار للأمام
+            _buildDirectionButton(icon: Icons.arrow_upward, command: 'F'),
+
+            // لليسار + لليمين
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, size: 50),
-                  color: Colors.blue,
-                  onPressed: () => sendCommand('L'),
-                ),
+                _buildDirectionButton(icon: Icons.arrow_back, command: 'L'),
                 const SizedBox(width: 60),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward, size: 50),
-                  color: Colors.blue,
-                  onPressed: () => sendCommand('R'),
-                ),
+                _buildDirectionButton(icon: Icons.arrow_forward, command: 'R'),
               ],
             ),
-            IconButton(
-              icon: const Icon(Icons.arrow_downward, size: 50),
-              color: Colors.blue,
-              onPressed: () => sendCommand('B'),
-            ),
+
+            // زرار للخلف
+            _buildDirectionButton(icon: Icons.arrow_downward, command: 'B'),
+
             Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: ElevatedButton(
-                onPressed: isPickingMedicine ? null : pickMedicine,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: 80),
+                child: ElevatedButton(
+                  onPressed:
+                      widget.isPickingMedicine ? null : widget.pickMedicine,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (isPickingMedicine) ...[
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (widget.isPickingMedicine) ...[
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 8),
+                        ],
+                        Icon(Icons.psychology),
                         SizedBox(width: 8),
+                        Text(
+                          widget.isPickingMedicine
+                              ? 'جارٍ التقاط الدواء...'
+                              : 'التقاط الدواء تلقائياً',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ],
-                      Icon(Icons.psychology),
-                      SizedBox(width: 8),
-                      Text(
-                        isPickingMedicine
-                            ? 'جارٍ التقاط الدواء...'
-                            : 'التقاط الدواء تلقائياً',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-            if (sendHttpTest != null) ...[
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: sendHttpTest,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.http),
-                      SizedBox(width: 8),
-                      Text(
-                        'اختبار الاتصال بالخادم',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       ),

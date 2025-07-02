@@ -231,10 +231,9 @@ class ControlScreenState extends State<ControlScreen> {
     }
     try {
       _connection!.output.add(Uint8List.fromList(command.codeUnits));
-      await _connection!.output.allSent;
       debugPrint("Command sent: $command");
     } catch (e) {
-      _showToast("Failed to send command: \\${e.toString()}");
+      _showToast("Failed to send command: ${e.toString()}");
       _disconnect();
     }
   }
@@ -290,65 +289,65 @@ class ControlScreenState extends State<ControlScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ConnectionStatusCard(
-              connectionStatusController: _connectionStatusController,
-              isConnectedController: _isConnectedController,
-              isConnected: _isConnected,
-              connectionStatus: _connectionStatus,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                opacity: 0.8,
+                image: AssetImage('assets/images/pexels.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              child:
-                  _devicesList.isEmpty
-                      ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "لا توجد أجهزة\nيرجى إقران جهازك من إعدادات البلوتوث",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton.icon(
-                            onPressed: _sendHttpTest,
-                            icon: const Icon(Icons.http),
-                            label: const Text('اختبار الاتصال بالخادم'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                ConnectionStatusCard(
+                  connectionStatusController: _connectionStatusController,
+                  isConnectedController: _isConnectedController,
+                  isConnected: _isConnected,
+                  connectionStatus: _connectionStatus,
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child:
+                      _devicesList.isEmpty
+                          ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "لا توجد أجهزة\nيرجى إقران جهازك من إعدادات البلوتوث",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 18),
                               ),
-                            ),
-                          ),
-                        ],
-                      )
-                      : _devicesList.isNotEmpty && !_isConnected
-                      ? DeviceList(
-                        devicesList: _devicesList,
-                        isConnected: _isConnected,
-                        selectedDevice: _selectedDevice,
-                        isButtonEnabled: _isButtonEnabled,
-                        isConnecting: _isConnecting,
-                        connect: _connect,
-                        disconnect: _disconnect,
-                      )
-                      : _isConnected
-                      ? ControlPanel(
-                        sendCommand: _sendCommand,
-                        isPickingMedicine: _isPickingMedicine,
-                        pickMedicine: _pickMedicine,
-                        sendHttpTest: _sendHttpTest,
-                      )
-                      : const SizedBox(),
+                              const SizedBox(height: 20),
+                            ],
+                          )
+                          : _devicesList.isNotEmpty && !_isConnected
+                          ? DeviceList(
+                            devicesList: _devicesList,
+                            isConnected: _isConnected,
+                            selectedDevice: _selectedDevice,
+                            isButtonEnabled: _isButtonEnabled,
+                            isConnecting: _isConnecting,
+                            connect: _connect,
+                            disconnect: _disconnect,
+                          )
+                          : _isConnected
+                          ? ControlPanel(
+                            sendCommand: _sendCommand,
+                            isPickingMedicine: _isPickingMedicine,
+                            pickMedicine: _pickMedicine,
+                            sendHttpTest: _sendHttpTest,
+                          )
+                          : const SizedBox(),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

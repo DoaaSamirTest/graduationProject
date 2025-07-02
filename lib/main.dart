@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gproject/utils/theme_data.dart';
 import 'screens/home_screen.dart';
 import 'screens/medicine_details_screen.dart';
 import 'screens/control_screen.dart';
@@ -18,7 +19,7 @@ class MedicineApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'تطبيق الأدوية الآلي',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Cairo'),
+      theme: appTheme,
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
       builder: (context, child) {

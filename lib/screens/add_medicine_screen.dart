@@ -20,14 +20,11 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text('إضافة دواء جديد'),
-          centerTitle: true,
-        ),
+        appBar: AppBar(title: Text('إضافة دواء جديد'), centerTitle: true),
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
+              opacity: 0.8,
               image: AssetImage('assets/images/pexels.jpg'),
               fit: BoxFit.cover,
             ),
@@ -43,9 +40,14 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'اسم الدواء',
-                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Color(0xFF2F6CAB)),
+                      ),
                       filled: true,
-                      fillColor:Colors.white.withValues(alpha: 0.4), // خلفية بيضاء شفافة للحقل
+                      fillColor: Colors.white.withValues(
+                        alpha: 0.8,
+                      ), // خلفية بيضاء شفافة للحقل
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -59,9 +61,12 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                     controller: _locationController,
                     decoration: InputDecoration(
                       labelText: 'موقع الدواء (مثال: A1, B2)',
-                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Color(0xFF2F6CAB)),
+                      ),
                       filled: true,
-                      fillColor: Colors.white.withValues(alpha: 0.4),
+                      fillColor: Colors.white.withValues(alpha: 0.8),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -76,18 +81,24 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                     child: InputDecorator(
                       decoration: InputDecoration(
                         labelText: 'وقت تناول الدواء',
-                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Color(0xFF2F6CAB)),
+                        ),
                         filled: true,
-                        fillColor: Colors.white.withValues(alpha: 0.4),
+                        fillColor: Colors.white.withValues(alpha: 0.8),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             _formatTimeOfDay(_selectedTime),
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xFF2F6CAB),
+                            ),
                           ),
-                          Icon(Icons.access_time),
+                          Icon(Icons.access_time, color: Color(0xFF2F6CAB)),
                         ],
                       ),
                     ),
@@ -96,16 +107,22 @@ class AddMedicineScreenState extends State<AddMedicineScreen> {
                   ElevatedButton(
                     onPressed: _saveMedicine,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withValues(alpha: 0.4),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text('حفظ الدواء', style: TextStyle(fontSize: 18,color: Colors.white)),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 24,
+                      ),
+                      child: Text(
+                        'حفظ الدواء',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                     ),
                   ),
+                  SizedBox(height: 22),
                 ],
               ),
             ),

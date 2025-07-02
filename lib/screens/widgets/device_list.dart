@@ -26,7 +26,7 @@ class DeviceList extends StatelessWidget {
       itemCount: devicesList.length,
       itemBuilder: (context, index) {
         final device = devicesList[index];
-        return Card(
+        return Card(elevation: 2,
           child: ListTile(
             leading: const Icon(Icons.bluetooth),
             title: Text(device.name ?? "اسم غير معروف"),
