@@ -27,25 +27,21 @@ class ControlScreen extends StatefulWidget {
 }
 
 class ControlScreenState extends State<ControlScreen> {
-  // Bluetooth variables
   BluetoothConnection? _connection;
   BluetoothDevice? _selectedDevice;
   List<BluetoothDevice> _devicesList = [];
 
-  // UI state variables
   bool _isConnecting = false;
   bool _isDisconnecting = false;
   bool _isConnected = false;
   bool _isButtonEnabled = true;
   String _connectionStatus = "Not Connected";
 
-  // Stream controllers
   final StreamController<String> _connectionStatusController =
       StreamController<String>.broadcast();
   final StreamController<bool> _isConnectedController =
       StreamController<bool>.broadcast();
 
-  // Medicine picking state
   bool _isPickingMedicine = false;
 
   @override
@@ -67,15 +63,16 @@ class ControlScreenState extends State<ControlScreen> {
 
   @override
   void dispose() {
-    _connectionStatusController.close();
-    _isConnectedController.close();
-    _disconnect();
+    _disconnectSyncSafe();
     super.dispose();
   }
 
-  // =================== Bluetooth Logic ===================
+  void _disconnectSyncSafe() async {
+    await _disconnect();
+    await _connectionStatusController.close();
+    await _isConnectedController.close();
+  }
 
-  /// Initializes Bluetooth and requests permissions.
   Future<void> _initializeBluetooth() async {
     try {
       bool isAvailable =
@@ -98,11 +95,10 @@ class ControlScreenState extends State<ControlScreen> {
       }
       await _getPairedDevices();
     } catch (e) {
-      _showToast("Error initializing Bluetooth: \\${e.toString()}");
+      _showToast("Error initializing Bluetooth: ${e.toString()}");
     }
   }
 
-  /// Gets paired Bluetooth devices.
   Future<void> _getPairedDevices() async {
     try {
       bool hasPermissions = await _requestBluetoothPermissions();
@@ -123,15 +119,13 @@ class ControlScreenState extends State<ControlScreen> {
         _showToast("Please grant Bluetooth permissions in app settings");
         await openAppSettings();
       } else {
-        _showToast("Bluetooth error: \\${e.message}");
+        _showToast("Bluetooth error: ${e.message}");
       }
     } catch (e) {
-      _showToast("Error getting paired devices: \\${e.toString()}");
-      debugPrint("Error details: $e");
+      _showToast("Error getting paired devices: ${e.toString()}");
     }
   }
 
-  /// Requests Bluetooth and location permissions.
   Future<bool> _requestBluetoothPermissions() async {
     try {
       if (await Permission.bluetoothConnect.request().isGranted &&
@@ -147,12 +141,10 @@ class ControlScreenState extends State<ControlScreen> {
       }
       return false;
     } catch (e) {
-      debugPrint("Permission error: $e");
       return false;
     }
   }
 
-  /// Connects to a Bluetooth device.
   Future<void> _connect(BluetoothDevice device) async {
     bool hasPermissions = await _requestBluetoothPermissions();
     if (!hasPermissions) {
@@ -164,7 +156,9 @@ class ControlScreenState extends State<ControlScreen> {
       _isConnecting = true;
       _isButtonEnabled = false;
       _connectionStatus = "Connecting...";
-      _connectionStatusController.add(_connectionStatus);
+      if (!_connectionStatusController.isClosed) {
+        _connectionStatusController.add(_connectionStatus);
+      }
     });
     try {
       _connection = await BluetoothConnection.toAddress(device.address);
@@ -172,11 +166,15 @@ class ControlScreenState extends State<ControlScreen> {
         _isConnected = true;
         _isConnecting = false;
         _selectedDevice = device;
-        _connectionStatus = "Connected to \\${device.name}";
-        _connectionStatusController.add(_connectionStatus);
-        _isConnectedController.add(true);
+        _connectionStatus = "Connected to ${device.name}";
+        if (!_connectionStatusController.isClosed) {
+          _connectionStatusController.add(_connectionStatus);
+        }
+        if (!_isConnectedController.isClosed) {
+          _isConnectedController.add(true);
+        }
       });
-      _showToast("Successfully connected to \\${device.name}");
+      _showToast("Successfully connected to ${device.name}");
       _connection!.input!
           .listen((Uint8List data) {
             String incomingData = ascii.decode(data);
@@ -190,20 +188,23 @@ class ControlScreenState extends State<ControlScreen> {
         _isConnecting = false;
         _isButtonEnabled = true;
         _connectionStatus = "Connection failed";
-        _connectionStatusController.add(_connectionStatus);
+        if (!_connectionStatusController.isClosed) {
+          _connectionStatusController.add(_connectionStatus);
+        }
       });
-      _showToast("Failed to connect: \\${e.toString()}");
+      _showToast("Failed to connect: ${e.toString()}");
     }
   }
 
-  /// Disconnects from the Bluetooth device.
   Future<void> _disconnect() async {
     if (_connection == null || _isDisconnecting) return;
     setState(() {
       _isDisconnecting = true;
       _isButtonEnabled = false;
       _connectionStatus = "Disconnecting...";
-      _connectionStatusController.add(_connectionStatus);
+      if (!_connectionStatusController.isClosed) {
+        _connectionStatusController.add(_connectionStatus);
+      }
     });
     try {
       await _connection!.close();
@@ -214,16 +215,19 @@ class ControlScreenState extends State<ControlScreen> {
         _connection = null;
         _selectedDevice = null;
         _connectionStatus = "Disconnected";
-        _connectionStatusController.add(_connectionStatus);
-        _isConnectedController.add(false);
+        if (!_connectionStatusController.isClosed) {
+          _connectionStatusController.add(_connectionStatus);
+        }
+        if (!_isConnectedController.isClosed) {
+          _isConnectedController.add(false);
+        }
       });
       _showToast("Disconnected successfully");
     } catch (e) {
-      _showToast("Error disconnecting: \\${e.toString()}");
+      _showToast("Error disconnecting: ${e.toString()}");
     }
   }
 
-  /// Sends a command to the connected Bluetooth device.
   Future<void> _sendCommand(String command) async {
     if (!_isConnected || _connection == null) {
       _showToast("Not connected to any device");
@@ -238,7 +242,6 @@ class ControlScreenState extends State<ControlScreen> {
     }
   }
 
-  /// Shows a toast message.
   void _showToast(String message) {
     Fluttertoast.showToast(
       msg: message,
@@ -249,7 +252,6 @@ class ControlScreenState extends State<ControlScreen> {
     );
   }
 
-  /// Simulates picking up medicine.
   Future<void> _pickMedicine() async {
     setState(() {
       _isPickingMedicine = true;
@@ -261,18 +263,15 @@ class ControlScreenState extends State<ControlScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('تم التقاط الدواء \\${widget.medicine?.name} بنجاح!'),
+        content: Text('تم التقاط الدواء ${widget.medicine?.name} بنجاح!'),
         backgroundColor: Colors.green,
       ),
     );
   }
 
-  /// Sends a test HTTP request to the Flask server
   Future<void> _sendHttpTest() async {
     await HttpTestService.sendHttpTest(context);
   }
-
-  // =================== UI ===================
 
   @override
   Widget build(BuildContext context) {
@@ -316,13 +315,13 @@ class ControlScreenState extends State<ControlScreen> {
                       _devicesList.isEmpty
                           ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 "لا توجد أجهزة\nيرجى إقران جهازك من إعدادات البلوتوث",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 18),
                               ),
-                              const SizedBox(height: 20),
+                              SizedBox(height: 20),
                             ],
                           )
                           : _devicesList.isNotEmpty && !_isConnected

@@ -7,12 +7,10 @@ final ThemeData appTheme = ThemeData(
   primaryColor: Color(0xFF2F6CAB), // أزرق هادي
   colorScheme: ColorScheme.light(
     primary: Color(0xFF2F6CAB),
-    secondary: Color(0xFFFDD835), // accent أصفر هادي
-    background: Color(0xFFFAFAFA),
+    secondary: Color(0xFFFDD835),
     surface: Colors.white,
     onPrimary: Colors.white,
     onSecondary: Colors.black,
-    onBackground: Colors.black,
     onSurface: Colors.black,
   ),
 

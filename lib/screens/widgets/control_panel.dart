@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_mjpeg/flutter_mjpeg.dart';
 
 class ControlPanel extends StatefulWidget {
   final Future<void> Function(String) sendCommand;
@@ -59,32 +60,28 @@ class _ControlPanelState extends State<ControlPanel> {
               height: 200,
               width: double.infinity,
               color: Colors.grey.shade300,
-              child: Center(
-                child:
-                    widget.isPickingMedicine
-                        ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(color: Colors.blue),
-                            SizedBox(height: 16),
-                            Text(
-                              'جارٍ التقاط الدواء...',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ],
-                        )
-                        : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.videocam, size: 48, color: Colors.grey),
-                            SizedBox(height: 8),
-                            Text(
-                              'كاميرا العربية',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-              ),
+              child:
+                  widget.isPickingMedicine
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(color: Colors.blue),
+                          SizedBox(height: 16),
+                          Text(
+                            'جارٍ التقاط الدواء...',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      )
+                      : Mjpeg(
+                        isLive: true,
+                        stream: 'http://192.168.1.7:5000',
+                        error:
+                            (context, error, stack) =>
+                                Center(child: Text('تعذر تحميل الفيديو')),
+                        fit: BoxFit.cover,
+                        timeout: const Duration(seconds: 10),
+                      ),
             ),
             const Spacer(),
             const Text(
