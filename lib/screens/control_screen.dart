@@ -336,6 +336,7 @@ class ControlScreenState extends State<ControlScreen> {
                           )
                           : _isConnected
                           ? ControlPanel(
+                            medicine: widget.medicine!,
                             sendCommand: _sendCommand,
                             isPickingMedicine: _isPickingMedicine,
                             pickMedicine: _pickMedicine,

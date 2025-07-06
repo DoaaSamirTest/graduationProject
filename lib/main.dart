@@ -9,7 +9,7 @@ import 'utils/database_helper.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseHelper().database;
-  runApp(MedicineApp()); // تشغيل التطبيق هنا
+  runApp(MedicineApp());
 }
 
 class MedicineApp extends StatelessWidget {
@@ -33,5 +33,4 @@ class MedicineApp extends StatelessWidget {
       },
     );
   }
-  
 }

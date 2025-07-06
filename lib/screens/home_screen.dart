@@ -51,95 +51,94 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        body:
-            _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      opacity: 0.8,
-                      image: AssetImage(
-                        'assets/images/pexels.jpg',
-                      ), // ← غيّري المسار حسب الصورة
-                      fit: BoxFit.cover,
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    opacity: 0.8,
+                    image: AssetImage(
+                      'assets/images/pexels.jpg',
                     ),
-                  ),
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Card(
-                          elevation: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              _getCurrentDate(),
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        ..._medicines.map(
-                          (medicine) => _buildMedicineCard(medicine),
-                        ),
-                        SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AddMedicineScreen(),
-                              ),
-                            );
-                            _loadMedicines();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'إضافة دواء جديد',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 22),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SearchScreen(),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.search),
-                          label: Text('البحث عن الأدوية'),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    fit: BoxFit.cover,
                   ),
                 ),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            _getCurrentDate(),
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ..._medicines.map(
+                        (medicine) => _buildMedicineCard(medicine),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddMedicineScreen(),
+                            ),
+                          );
+                          _loadMedicines();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'إضافة دواء جديد',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 22),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SearchScreen(),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.search),
+                        label: Text('البحث عن الأدوية'),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
 
   Widget _buildMedicineCard(Medicine medicine) {
     return Card(
-      color: Colors.white.withValues(alpha: 0.85),
+      color: Colors.white.withOpacity(0.85),
       elevation: 2,
       margin: EdgeInsets.only(bottom: 24),
       child: InkWell(
@@ -186,6 +185,14 @@ class HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                tooltip: 'حذف الدواء',
+                onPressed: () async {
+                  await _dbHelper.deleteMedicineByName(medicine.name);
+                  _loadMedicines();
+                },
               ),
               CircleAvatar(
                 radius: 14,

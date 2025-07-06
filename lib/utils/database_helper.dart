@@ -32,7 +32,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // إدخال بيانات أولية
     await db.insert(
       'medicines',
       Medicine(name: 'بنادول', time: '09:00', location: 'A1').toMap(),
@@ -72,10 +71,23 @@ class DatabaseHelper {
 
   Future<int> deleteMedicine(int id) async {
     Database db = await database;
-    return await db.delete('medicines', where: 'id = ?', whereArgs: [id]);
+    return await db.delete(
+      'medicines',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
-  /// Gets all medicine names from the database
+  // ✅ دالة حذف دواء باستخدام الاسم
+  Future<int> deleteMedicineByName(String name) async {
+    Database db = await database;
+    return await db.delete(
+      'medicines',
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+  }
+
   Future<List<String>> getMedicineNames() async {
     Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -85,7 +97,6 @@ class DatabaseHelper {
     return List.generate(maps.length, (i) => maps[i]['name'] as String);
   }
 
-  /// Gets a medicine by name
   Future<Medicine?> getMedicineByName(String name) async {
     Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query(

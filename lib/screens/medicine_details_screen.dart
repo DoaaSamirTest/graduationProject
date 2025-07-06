@@ -170,21 +170,21 @@ class MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                             ),
                           ),
                           SizedBox(height: 22),
-                          ElevatedButton.icon(
-                            onPressed: () async {
-                              await HttpTestService.sendMedicineNameToServer(
-                                context,
-                                _medicine.name,
-                              );
-                            },
-                            icon: Icon(Icons.send),
-                            label: Text('إرسال اسم الدواء للخادم'),
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
+                          // ElevatedButton.icon(
+                          //   onPressed: () async {
+                          //     await HttpTestService.sendMedicineNameToServer(
+                          //       context,
+                          //       _medicine.name,
+                          //     );
+                          //   },
+                          //   icon: Icon(Icons.send),
+                          //   label: Text('إرسال اسم الدواء للخادم'),
+                          //   style: ElevatedButton.styleFrom(
+                          //     shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(8),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
